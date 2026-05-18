@@ -19,7 +19,8 @@ dirs.forEach(d => {
       !src.includes('.git') &&
       !src.includes('dist') &&
       !src.includes('_backup') &&
-      !src.includes('frames')
+      !src.includes('frames') &&
+      !src.includes('视频节点')
     });
   }
 });

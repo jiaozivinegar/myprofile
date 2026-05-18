@@ -4,7 +4,8 @@
       "Bash(npx --version)",
       "Bash(npx *)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} in %{time_total}s\\\\n\" http://localhost:3000/)",
-      "Bash(start *)"
+      "Bash(start *)",
+      "Bash(curl -sIL https://myprofile.zh-cn.edgeone.cool/ --max-time 10)"
     ]
   }
 }

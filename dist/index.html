@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>杨美龙 · Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            height: 100%;
+            background: #ffffff;
+            color: #111111;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* 顶部导航 */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 999;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+        .logo {
+            font-size: 15px;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+        .nav-links {
+            display: flex;
+            gap: 45px;
+        }
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #999;
+        }
+
+        /* 首页封面 自定义背景图 */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            background: url("images/bg.jpg") center center / cover no-repeat fixed;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 60px 50px;
+        }
+        .hero::after{
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            color: #fff;
+        }
+        .hero-tagline {
+            font-size: 12px;
+            letter-spacing: 2px;
+            opacity: 0.9;
+            margin-bottom: 25px;
+        }
+        .hero-title {
+            font-size: 120px;
+            font-weight: 300;
+            letter-spacing: 10px;
+            line-height: 1;
+            margin-bottom: 15px;
+        }
+        .hero-sub {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+        .hero-meta {
+            display: flex;
+            gap: 25px;
+            font-size: 12px;
+            opacity: 0.85;
+            flex-wrap: wrap;
+        }
+        .scroll-hint {
+            position: absolute;
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: #fff;
+            text-align: center;
+            z-index: 1;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%,100%{transform: translateX(-50%) translateY(0);}
+            50%{transform: translateX(-50%) translateY(-6px);}
+        }
+        .scroll-hint::after {
+            content: "";
+            display: block;
+            width: 1px;
+            height: 32px;
+            background: #fff;
+            margin: 12px auto 0;
+        }
+
+        /* 作品区块 */
+        .works-section {
+            padding: 120px 50px 100px;
+            background: #fff;
+            scroll-margin-top: 80px;
+        }
+        .work-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        /* 图片网格 自适应原图比例 */
+        .img-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+        .img-grid img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            object-fit: cover;
+        }
+        .img-grid img:hover {
+            opacity: 0.85;
+            transform: translateY(-3px);
+        }
+
+        /* 视频网格 + 循环播放 */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        .video-grid video {
+            width: 100%;
+            border-radius: 4px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* 图片放大弹窗 */
+        .img-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .img-popup img,
+        .img-popup video {
+            max-width: 95%;
+            max-height: 95vh;
+            object-fit: contain;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .img-popup.active {
+            display: flex;
+            opacity: 1;
+        }
+        .img-popup.active img,
+        .img-popup.active video {
+            transform: scale(1);
+        }
+        #bigVideo { display: none; }
+        .img-popup.show-video #bigImg { display: none; }
+        .img-popup.show-video #bigVideo { display: block; }
+        .video-grid video { cursor: pointer; }
+
+        /* 黑色个人介绍板块样式 */
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .intro-section {
+            background: #000;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 40px 0;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            margin-bottom: 60px;
+        }
+        .intro-left { flex: 1; }
+        .intro-right { flex: 0 0 300px; }
+        .intro-tag {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+        .intro-title {
+            font-size: 36px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        .intro-desc {
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        .intro-tags {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .position-section {
+            background: #000;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            gap: 60px;
+            margin-bottom: 80px;
+        }
+        .position-left { flex: 0 0 320px; }
+        .position-tag {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        .position-title {
+            font-size: 22px;
+            font-weight: 500;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+        .position-desc {
+            font-size: 11px;
+            color: #999;
+            line-height: 1.8;
+        }
+        .position-right {
+            flex: 1;
+            display: flex;
+        }
+        .step-item {
+            flex: 1;
+            padding: 0 20px;
+            border-left: 1px solid #333;
+        }
+        .step-item:first-child {
+            border-left: none;
+            padding-left: 0;
+        }
+        .step-number {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        .step-title {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+        .step-desc {
+            font-size: 11px;
+            color: #999;
+            line-height: 1.7;
+        }
+
+        /* 技能板块 */
+        .container-skill {
+            background: #000;
+            color: #fff;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            padding: 60px 0;
+            margin-bottom: 80px;
+            scroll-margin-top: 80px;
+        }
+        .section-tag {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+        .section-title {
+            font-size: 36px;
+            font-weight: 500;
+            line-height: 1.4;
+            margin-bottom: 50px;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+        .skill-column {
+            border-right: 1px solid #333;
+            padding-right: 40px;
+        }
+        .skill-column:last-child {
+            border-right: none;
+            padding-right: 0;
+        }
+        .column-title {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .tag {
+            border: 1px solid #555;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            color: #ccc;
+            white-space: nowrap;
+        }
+        .skill-desc {
+            margin-top: 50px;
+            font-size: 14px;
+            color: #999;
+            line-height: 1.8;
+        }
+
+        /* 联系方式 */
+        .container-contact {
+            background: #000;
+            color: #fff;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            padding: 60px 0;
+            scroll-margin-top: 80px;
+        }
+        .contact-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        .contact-col {
+            position: relative;
+        }
+        .contact-col:first-child::after {
+            content: "";
+            position: absolute;
+            right: -20px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background-color: #333;
+        }
+        .col-title {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+        .tags-contact {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .tag-contact {
+            border: 1px solid #555;
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-size: 14px;
+            color: #ccc;
+            white-space: nowrap;
+        }
+        .tag-contact.single {
+            padding: 12px 30px;
+            font-size: 14px;
+        }
+        .desc-text {
+            font-size: 14px;
+            color: #999;
+            line-height: 1.8;
+        }
+
+        /* 页脚【全部字体缩小】 */
+        .footer {
+            width: 100%;
+            padding: 60px 60px 30px;
+            background: #000;
+            color: #fff;
+            border-top: 1px solid #222;
+        }
+        .footer-wrap{
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .footer-left h4{
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            color: #e5e5e5;
+        }
+        .footer-left p{
+            font-size: 11px;
+            color: #777;
+            line-height: 1.7;
+            max-width: 400px;
+        }
+        .footer-right p{
+            font-size: 11px;
+            color: #777;
+            line-height: 1.7;
+        }
+        .footer-bottom{
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #1a1a1a;
+            font-size: 10px;
+            color: #555;
+            letter-spacing: 1px;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 65px; letter-spacing: 5px; }
+            .header { padding: 15px 20px; }
+            .nav-links { gap: 20px; }
+            .nav-links a { font-size: 12px; }
+            .hero { padding: 40px 20px; }
+            .works-section { padding: 80px 20px; }
+            .img-grid{grid-template-columns: repeat(2,1fr); gap:15px;}
+            .video-grid{grid-template-columns: 1fr; gap:20px;}
+            
+            .intro-section,.position-section {
+                flex-direction: column;
+                padding: 30px 0;
+            }
+            .intro-right,.position-left {
+                margin-top: 30px;
+                width: 100%;
+                flex: none;
+            }
+            .position-right {
+                flex-direction: column;
+                margin-top: 30px;
+            }
+            .step-item {
+                border-left: none;
+                border-top: 1px solid #333;
+                padding: 20px 0 0;
+                margin-top: 20px;
+            }
+            .skills-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 0;
+            }
+            .skill-column {
+                border-right: none;
+                border-bottom: 1px solid #333;
+                padding-bottom: 30px;
+                padding-right: 0;
+            }
+            .contact-wrap {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                padding: 0;
+            }
+            .contact-col:first-child::after {display: none;}
+            .footer {
+                padding: 40px 20px 25px;
+            }
+            .footer-wrap{flex-direction: column;}
+        }
+
+        @media (max-width: 480px) {
+            .hero-title { font-size: 48px; }
+            .nav-links { gap: 12px; }
+            .intro-title { font-size: 28px; }
+            .section-title { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<div class="header">
+    <div class="logo">杨美龙 · DESIGN</div>
+    <div class="nav-links">
+        <a href="#render">作品</a>
+        <a href="#about">个人介绍</a>
+        <a href="#skill">技能流程</a>
+        <a href="#contact">联系方式</a>
+    </div>
+</div>
+
+<!-- 首页封面 -->
+<div class="hero">
+    <div class="hero-content">
+        <div class="hero-tagline">VISUAL DESIGNER · FULL CREATION FIELD · 2026</div>
+        <h1 class="hero-title">杨美龙</h1>
+        <div class="hero-sub">YANG MEILONG &nbsp; | &nbsp; 专注视觉创作 全域设计表达</div>
+        <div class="hero-meta">
+            <span>三维建模渲染 · AI创意视觉 · 动态视觉短片</span>
+            <span>极简高级 · 商业质感 · 潮流视觉</span>
+        </div>
+    </div>
+    <div class="scroll-hint">SCROLL</div>
+</div>
+
+<!-- 3D渲染 -->
+<div id="render" class="works-section">
+    <div class="work-title">— 3D 渲染作品 —</div>
+    <div class="img-grid">
+        <img src="images/3d/1.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/2.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/3.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/4.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/5.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/6.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/7.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/8.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/9.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/10.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/11.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/12.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/13.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/14.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/15.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/16.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/17.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/18.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/19.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/20.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/21.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/22.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/23.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/24.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/25.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/26.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/27.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/28.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/29.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/30.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/31.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/32.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/3d/33.jpg" alt="" loading="lazy" decoding="async">
+    </div>
+</div>
+
+<!-- AI视觉 -->
+<div id="ai" class="works-section">
+    <div class="work-title">— AI 视觉创作 —</div>
+    <div class="img-grid">
+        <img src="images/ai/1.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/ai/2.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/ai/3.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/ai/4.jpg" alt="" loading="lazy" decoding="async">
+        <img src="images/ai/5.jpg" alt="" loading="lazy" decoding="async">
+    </div>
+</div>
+
+<!-- 动态设计 -->
+<div id="motion" class="works-section">
+    <div class="work-title">— 动态视觉设计 —</div>
+    <div class="video-grid">
+        <video loop muted playsinline preload="none">
+            <source data-src="images/video/1.mp4" type="video/mp4">
+        </video>
+        <video loop muted playsinline preload="none">
+            <source data-src="images/video/2.mp4" type="video/mp4">
+        </video>
+        <video loop muted playsinline preload="none">
+            <source data-src="images/video/3.mp4" type="video/mp4">
+        </video>
+        <video loop muted playsinline preload="none">
+            <source data-src="images/video/4.mp4" type="video/mp4">
+        </video>
+    </div>
+</div>
+
+<!-- 个人介绍 + 技能 + 联系方式 黑色板块 -->
+<div id="about" style="background:#000; padding: 60px 0; scroll-margin-top: 80px;">
+    <div class="section-container">
+        <!-- 个人介绍 -->
+        <div class="intro-section">
+            <div class="intro-left">
+                <div class="intro-tag">—  个人介绍</div>
+                <div class="intro-title">3年国内视觉经验，专注产品视觉落地。</div>
+            </div>
+            <div class="intro-right">
+                <div class="intro-desc">
+                    3年国内视觉经验，专注3C 产品视觉。<br><br>
+                    以 Rhino建模、Keyshot渲染、C4d 渲染、PS 后期、AI结合与版式系统，完成从视觉方向、产品表达到最终交付的完整项目流程。<br><br>
+                    核心能力不止于生成画面，而是将产品卖点转译为适合海外市场的品牌视觉故事。
+                </div>
+                <div class="intro-tags">OVERSEAS VISUAL · AI + C4D · BRAND DELIVERY</div>
+            </div>
+        </div>
+
+        <div class="position-section">
+            <div class="position-left">
+                <div class="position-tag">CREATIVE POSITION</div>
+                <div class="position-title">将产品卖点重新组织成可被记住、可被交付的视觉故事。</div>
+                <div class="position-desc">
+                    每组作品先判断产品适合的情绪、场景与品牌语气，再用 AI 发散、3D 控制、后期合成和版式收束，让画面既有想象力，也能进入海外营销页面与广告投放。
+                </div>
+            </div>
+            <div class="position-right">
+                <div class="step-item">
+                    <div class="step-number">01 STRATEGY</div>
+                    <div class="step-title">把功能卖点转成消费理由。</div>
+                    <div class="step-desc">将功能参数转译为用户可感知的使用理由与场景情绪。</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">02 IMAGINATION</div>
+                    <div class="step-title">为产品建立独特视觉记忆点。</div>
+                    <div class="step-desc">通过空间、光线、材质和镜头语言，让每个产品都有自己的品牌气质。</div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">03 DELIVERY</div>
+                    <div class="step-title">让创意最终能落到页面和物料。</div>
+                    <div class="step-desc">控制留白、信息层级和系统统一性，确保视觉能直接进入作品集、官网和营销场景。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 技能 -->
+        <div id="skill" class="container-skill">
+            <div class="section-tag">—  工作流程与个人技能</div>
+            <div class="section-title">工作流程与个人技能</div>
+            <div class="skills-grid">
+                <div class="skill-column">
+                    <div class="column-title">UNDERSTANDING & STRATEGY</div>
+                    <div class="tags">
+                        <span class="tag">需求分析</span>
+                        <span class="tag">方向定位</span>
+                    </div>
+                </div>
+                <div class="skill-column">
+                    <div class="column-title">EXPLORATION & CONCEPT</div>
+                    <div class="tags">
+                        <span class="tag">AI 发散</span>
+                        <span class="tag">创意概念</span>
+                    </div>
+                </div>
+                <div class="skill-column">
+                    <div class="column-title">DEVELOPMENT & POLISH</div>
+                    <div class="tags">
+                        <span class="tag">Cinema 4D</span>
+                        <span class="tag">Octane Render</span>
+                        <span class="tag">Keyshot</span>
+                        <span class="tag">Rhino</span>
+                    </div>
+                </div>
+                <div class="skill-column">
+                    <div class="column-title">DELIVERY & FINALIZATION</div>
+                    <div class="tags">
+                        <span class="tag">Photoshop</span>
+                        <span class="tag">After Effects</span>
+                        <span class="tag">画面调色</span>
+                        <span class="tag">版式优化</span>
+                    </div>
+                </div>
+            </div>
+            <div class="skill-desc">
+                核心优势：从产品定位到最终交付，关注品牌调性、画面一致性、信息层级与营销场景适配。
+            </div>
+        </div>
+
+        <!-- 联系方式 -->
+        <div id="contact" class="container-contact">
+            <div class="section-tag">—  联系方式</div>
+            <div class="section-title">联系方式</div>
+            <div class="contact-wrap">
+                <div class="contact-col">
+                    <div class="col-title">求职方向</div>
+                    <div class="tags-contact">
+                        <span class="tag-contact">渲染师</span>
+                        <span class="tag-contact">产品视觉设计</span>
+                    </div>
+                    <div class="desc-text">
+                        期待参与长期品牌视觉、跨境产品 KV 与营销物料项目。
+                    </div>
+                </div>
+                <div class="contact-col">
+                    <div class="col-title">联系方式</div>
+                    <div class="tags-contact">
+                        <span class="tag-contact single">电话/微信 17724880179</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+    <div class="footer-wrap">
+        <div class="footer-left">
+            <h4>YANG MEILONG DESIGN</h4>
+            <p>专注商业产品视觉设计与三维渲染创作，深耕3C产品视觉赛道，融合AI创意设计与传统三维制作，致力于打造适配商业市场、具备品牌质感的优质视觉作品，用心完成每一份视觉设计交付。</p>
+        </div>
+        <div class="footer-right">
+            <p>设计理念：以视觉赋能产品，以创意传递价值</p>
+            <p>服务范围：产品渲染 / 品牌视觉 / 动态短片 / 商业版式设计</p>
+            <p>合作意向：全职就职 · 项目接单 · 长期视觉项目合作</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        本作品集仅供求职与作品展示使用 | 所有视觉作品均为个人原创设计 | © 2026 杨美龙 保留所有设计版权
+    </div>
+</div>
+
+<!-- 图片/视频弹窗 -->
+<div class="img-popup" id="imgPop">
+    <img src="" alt="大图预览" id="bigImg">
+    <video id="bigVideo" loop muted playsinline controls></video>
+</div>
+
+<script>
+    const imgs = document.querySelectorAll('.img-grid img');
+    const pop = document.getElementById('imgPop');
+    const bigImg = document.getElementById('bigImg');
+    const bigVideo = document.getElementById('bigVideo');
+
+    // 点击图片放大
+    imgs.forEach(item=>{
+        item.addEventListener('click',function(e){
+            e.stopPropagation();
+            bigImg.src = this.src;
+            pop.classList.remove('show-video');
+            pop.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        })
+    })
+
+    // 关闭弹窗
+    function closePopup(){
+        pop.classList.remove('active', 'show-video');
+        bigVideo.pause();
+        document.body.style.overflow = '';
+    }
+
+    // 点击遮罩关闭(点视频本身/控制条不关闭)
+    pop.addEventListener('click',closePopup);
+    bigVideo.addEventListener('click',e=>e.stopPropagation());
+
+    // ESC键关闭
+    document.addEventListener('keydown',(e)=>{
+        if(e.key === 'Escape' && pop.classList.contains('active')){
+            closePopup();
+        }
+    })
+
+    // 视频懒加载 + 进入视口自动播放
+    const videos = document.querySelectorAll('.video-grid video');
+    const videoObserver = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+            const video = entry.target;
+            if(entry.isIntersecting){
+                const source = video.querySelector('source');
+                if(source.dataset.src){
+                    source.src = source.dataset.src;
+                    delete source.dataset.src;
+                    video.load();
+                }
+                video.play().catch(()=>{});
+            } else {
+                video.pause();
+            }
+        });
+    },{rootMargin: '100px'});
+    videos.forEach(v=>videoObserver.observe(v));
+
+    // 点击视频放大
+    videos.forEach(item=>{
+        item.addEventListener('click',function(e){
+            e.stopPropagation();
+            const source = this.querySelector('source');
+            const src = source.src || source.dataset.src;
+            bigVideo.src = src;
+            pop.classList.add('show-video','active');
+            bigVideo.play().catch(()=>{});
+            document.body.style.overflow = 'hidden';
+        })
+    })
+</script>
+
+</body>
+</html>

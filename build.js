@@ -14,7 +14,13 @@ files.forEach(f => {
 const dirs = ['images', 'pdf_assets'];
 dirs.forEach(d => {
   if (fs.existsSync(d)) {
-    fs.cpSync(d, path.join(dist, d), { recursive: true, filter: (src) => !src.includes('node_modules') && !src.includes('.git') && !src.includes('dist') });
+    fs.cpSync(d, path.join(dist, d), { recursive: true, filter: (src) =>
+      !src.includes('node_modules') &&
+      !src.includes('.git') &&
+      !src.includes('dist') &&
+      !src.includes('_backup') &&
+      !src.includes('frames')
+    });
   }
 });
 

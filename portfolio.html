@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>杨美龙 · 作品集</title>
+<style>
+    @page {
+        size: A4 portrait;
+        margin: 16mm 14mm;
+    }
+    @page :first {
+        margin: 0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+        color: #111;
+        background: #fff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* 封面整页 */
+    .cover {
+        width: 210mm;
+        height: 297mm;
+        page-break-after: always;
+        position: relative;
+        background:
+            linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 60%, transparent 100%),
+            url("images/bg.jpg") center center / cover no-repeat;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 40mm 20mm;
+    }
+    .cover .tag {
+        font-size: 10pt;
+        letter-spacing: 3px;
+        opacity: 0.9;
+        margin-bottom: 8mm;
+    }
+    .cover h1 {
+        font-size: 64pt;
+        font-weight: 300;
+        letter-spacing: 8pt;
+        line-height: 1;
+        margin-bottom: 6mm;
+    }
+    .cover .sub {
+        font-size: 11pt;
+        opacity: 0.9;
+        margin-bottom: 8mm;
+        letter-spacing: 1pt;
+    }
+    .cover .meta {
+        font-size: 9pt;
+        line-height: 1.8;
+        opacity: 0.85;
+    }
+
+    /* 章节标题 */
+    .section-head {
+        margin-bottom: 8mm;
+        padding-bottom: 4mm;
+        border-bottom: 1px solid #111;
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+    .section-head.break-before {
+        page-break-before: always;
+        break-before: page;
+    }
+    .section-head .tag {
+        font-size: 8pt;
+        letter-spacing: 2pt;
+        color: #888;
+        margin-bottom: 2mm;
+    }
+    .section-head h2 {
+        font-size: 18pt;
+        font-weight: 500;
+        letter-spacing: 1pt;
+    }
+
+    /* 瀑布流(双列, 原始比例) */
+    .masonry {
+        column-count: 2;
+        column-gap: 5mm;
+    }
+    .masonry img {
+        width: 100%;
+        height: auto;
+        display: block;
+        margin-bottom: 5mm;
+        border-radius: 1mm;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    /* 动态视觉胶片 */
+    .strip-block {
+        margin-bottom: 6mm;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .strip-block img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 1mm;
+    }
+    .strip-block .caption {
+        font-size: 8pt;
+        color: #666;
+        margin-top: 1.5mm;
+        letter-spacing: 1pt;
+    }
+
+    /* 个人信息整页 */
+    .about-page {
+        page-break-before: always;
+        break-before: page;
+        background: #000;
+        color: #fff;
+        min-height: calc(297mm - 32mm);
+        padding: 4mm 0;
+        position: relative;
+    }
+    .about-page .section-head {
+        border-color: #444;
+        margin-bottom: 10mm;
+    }
+    .about-page .section-head .tag { color: #888; }
+    .about-page .section-head h2 { color: #fff; }
+    .about-block { margin-bottom: 10mm; padding: 0 4mm; }
+    .about-block h3 {
+        font-size: 9pt;
+        color: #999;
+        letter-spacing: 2pt;
+        margin-bottom: 3mm;
+    }
+    .about-block .big {
+        font-size: 16pt;
+        font-weight: 500;
+        line-height: 1.5;
+        margin-bottom: 4mm;
+    }
+    .about-block p {
+        font-size: 10pt;
+        line-height: 1.8;
+        color: #ccc;
+    }
+    .skills-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 6mm;
+        margin-top: 6mm;
+    }
+    .skill-col h4 {
+        font-size: 7pt;
+        color: #888;
+        letter-spacing: 1pt;
+        margin-bottom: 3mm;
+    }
+    .skill-col .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2mm;
+    }
+    .skill-col .tag-pill {
+        border: 1px solid #555;
+        border-radius: 10mm;
+        padding: 1.5mm 3.5mm;
+        font-size: 8pt;
+        color: #ccc;
+    }
+    .contact-line {
+        font-size: 12pt;
+        margin-top: 4mm;
+        letter-spacing: 1pt;
+    }
+    .footer-note {
+        margin-top: 14mm;
+        font-size: 7pt;
+        color: #555;
+        text-align: center;
+        letter-spacing: 1pt;
+        padding: 3mm 4mm 0;
+        border-top: 1px solid #222;
+    }
+</style>
+</head>
+<body>
+
+<!-- 封面 -->
+<div class="cover">
+    <div class="tag">VISUAL DESIGNER · FULL CREATION FIELD · 2026</div>
+    <h1>杨美龙</h1>
+    <div class="sub">YANG MEILONG &nbsp;|&nbsp; 专注视觉创作 全域设计表达</div>
+    <div class="meta">
+        三维建模渲染 · AI 创意视觉 · 动态视觉短片<br>
+        极简高级 · 商业质感 · 潮流视觉
+    </div>
+</div>
+
+<!-- 3D 渲染:原始比例瀑布流 -->
+<div class="section-head">
+    <div class="tag">01 / 3D RENDERING</div>
+    <h2>3D 渲染作品</h2>
+</div>
+<div class="masonry">
+    <img src="images/3d/1.jpg">
+    <img src="images/3d/2.jpg">
+    <img src="images/3d/3.jpg">
+    <img src="images/3d/4.jpg">
+    <img src="images/3d/5.jpg">
+    <img src="images/3d/6.jpg">
+    <img src="images/3d/7.jpg">
+    <img src="images/3d/8.jpg">
+    <img src="images/3d/9.jpg">
+    <img src="images/3d/10.jpg">
+    <img src="images/3d/11.jpg">
+    <img src="images/3d/12.jpg">
+    <img src="images/3d/13.jpg">
+    <img src="images/3d/14.jpg">
+    <img src="images/3d/15.jpg">
+    <img src="images/3d/16.jpg">
+    <img src="images/3d/17.jpg">
+    <img src="images/3d/18.jpg">
+    <img src="images/3d/19.jpg">
+    <img src="images/3d/20.jpg">
+    <img src="images/3d/21.jpg">
+    <img src="images/3d/22.jpg">
+    <img src="images/3d/23.jpg">
+    <img src="images/3d/24.jpg">
+    <img src="images/3d/25.jpg">
+    <img src="images/3d/26.jpg">
+    <img src="images/3d/27.jpg">
+    <img src="images/3d/28.jpg">
+    <img src="images/3d/29.jpg">
+    <img src="images/3d/30.jpg">
+    <img src="images/3d/31.jpg">
+    <img src="images/3d/32.jpg">
+    <img src="images/3d/33.jpg">
+</div>
+
+<!-- AI 视觉:原始比例瀑布流 -->
+<div class="section-head break-before">
+    <div class="tag">02 / AI VISUAL CREATION</div>
+    <h2>AI 视觉创作</h2>
+</div>
+<div class="masonry">
+    <img src="images/ai/1.jpg">
+    <img src="images/ai/2.jpg">
+    <img src="images/ai/3.jpg">
+    <img src="images/ai/4.jpg">
+    <img src="images/ai/5.jpg">
+</div>
+
+<!-- 动态视觉胶片 -->
+<div class="section-head break-before">
+    <div class="tag">03 / MOTION DESIGN</div>
+    <h2>动态视觉设计</h2>
+</div>
+<div class="strip-block">
+    <img src="pdf_assets/strips/strip_1.jpg">
+    <div class="caption">— LOOP 01 / 关键帧拆解 · 完整动效详见线上版本</div>
+</div>
+<div class="strip-block">
+    <img src="pdf_assets/strips/strip_2.jpg">
+    <div class="caption">— LOOP 02 / 关键帧拆解</div>
+</div>
+<div class="strip-block">
+    <img src="pdf_assets/strips/strip_3.jpg">
+    <div class="caption">— LOOP 03 / 关键帧拆解</div>
+</div>
+<div class="strip-block">
+    <img src="pdf_assets/strips/strip_4.jpg">
+    <div class="caption">— LOOP 04 / 关键帧拆解</div>
+</div>
+
+<!-- 个人介绍 + 技能 + 联系 -->
+<div class="about-page">
+    <div class="section-head" style="margin-left:4mm; margin-right:4mm;">
+        <div class="tag">04 / ABOUT &amp; SKILLS</div>
+        <h2>个人介绍 · 技能 · 联系方式</h2>
+    </div>
+
+    <div class="about-block">
+        <h3>— 个人介绍</h3>
+        <div class="big">3 年国内视觉经验,专注产品视觉落地。</div>
+        <p>
+            以 Rhino 建模、Keyshot 渲染、C4D 渲染、PS 后期、AI 结合与版式系统,
+            完成从视觉方向、产品表达到最终交付的完整项目流程。<br>
+            核心能力不止于生成画面,而是将产品卖点转译为适合海外市场的品牌视觉故事。
+        </p>
+    </div>
+
+    <div class="about-block">
+        <h3>— 工作流程与技能</h3>
+        <div class="skills-row">
+            <div class="skill-col">
+                <h4>UNDERSTANDING</h4>
+                <div class="tags">
+                    <span class="tag-pill">需求分析</span>
+                    <span class="tag-pill">方向定位</span>
+                </div>
+            </div>
+            <div class="skill-col">
+                <h4>EXPLORATION</h4>
+                <div class="tags">
+                    <span class="tag-pill">AI 发散</span>
+                    <span class="tag-pill">创意概念</span>
+                </div>
+            </div>
+            <div class="skill-col">
+                <h4>DEVELOPMENT</h4>
+                <div class="tags">
+                    <span class="tag-pill">Cinema 4D</span>
+                    <span class="tag-pill">Octane</span>
+                    <span class="tag-pill">Keyshot</span>
+                    <span class="tag-pill">Rhino</span>
+                </div>
+            </div>
+            <div class="skill-col">
+                <h4>DELIVERY</h4>
+                <div class="tags">
+                    <span class="tag-pill">Photoshop</span>
+                    <span class="tag-pill">After Effects</span>
+                    <span class="tag-pill">调色</span>
+                    <span class="tag-pill">版式</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-block">
+        <h3>— 求职方向 &amp; 联系方式</h3>
+        <p>渲染师 · 产品视觉设计 · 期待参与长期品牌视觉、跨境产品 KV 与营销物料项目。</p>
+        <div class="contact-line">电话 / 微信 &nbsp; 17724880179</div>
+    </div>
+
+    <div class="footer-note">
+        本作品集仅供求职与作品展示使用 · 所有视觉作品均为个人原创设计 · © 2026 杨美龙
+    </div>
+</div>
+
+</body>
+</html>
